@@ -2,19 +2,14 @@
 #include "contacts.h"
 void Checkcapacity(struct contacts* p)
 {
-	if (p->capacity == p->sz)
+	if (p->capacity <= p->sz)
 	{
 		//增加容量
-		info* tmp=(info*)realloc(p->x, (p->capacity + 2) * sizeof(info));
+		info* tmp=(info*)realloc(p->x, (p->capacity * 2) * sizeof(info));
 		if (tmp != NULL)
 		{
 			p->x = tmp;
-			p->capacity += 2;
-			printf("增容成功\n");
-		}
-		else
-		{
-			printf("增容失败\n");
+			p->capacity *= 2;
 		}
 	}
 }
@@ -176,10 +171,10 @@ void contacts_sort(struct contacts* p)
 	switch (input)
 	{
 	case 1:
-		qsort(p->x, p->sz,sizeof(p->x->name), name_cmp);
+		qsort(p->x, p->sz,sizeof(info), name_cmp);
 		break;
 	case 2:
-		qsort(p->x, p->sz, sizeof(p->sz), age_cmp);
+		qsort(p->x, p->sz, sizeof(info), age_cmp);
 		break;
 	default:
 		printf("选择错误\n");
@@ -188,11 +183,11 @@ void contacts_sort(struct contacts* p)
 }
 int name_cmp(const void* e1,const void*e2)
 {
-	return (int)(((contacts*)e1)->x->name - ((contacts*)e2)->x->name);
+	return strcmp(((info*)e1)->name, ((info*)e2)->name);
 }
 int age_cmp(const void* e1, const void* e2)
 {
-
+	return ((info*)e1)->age - ((info*)e2)->age;
 }
 void Savecontact(struct contacts* p)
 {
